@@ -1,0 +1,21 @@
+.searchContainer{:style => "height: 32px;"}
+  .searchBar
+    %input#searchInContacts{:onkeyup => "searchInContactsFilter(this)", :placeholder => "Search Contacts...", :type => "text"}
+      .searchContainerIcon
+.buddiesContainer.acordeon
+  .buddyListHeader.acordeonHeader
+    = "Contacts (" + (@buddies.count - 1).to_s + ")"
+    .buddyTogleBtn.AcordeonListHeaderBtn{:onclick => "toggleAcordeon(this);"}
+  .acordeonList
+    - @buddies.each do |buddy|
+      -unless buddy["id"] == @session["buddy_id"]
+        %a.buddyLink{ :href => "#chat"}
+          .buddy.acordeonListItem.buddy_content.change_channel{ :id => buddy["id"], :class => buddy["status"],"data-show-offline" => @settings.show_offline.to_s() ,:name => (defined?(@myBuddiesMap[buddy["id"]]))? @myBuddiesMap[buddy["id"]]:nil, :message_status => (defined?(buddy["nickname"])) ? buddy["nickname"]:nil}
+            %img.buddyPic{:src => buddy["small_photo_url"], :title => buddy["name"]}
+              .buddyStatus{ :class => buddy["status"]}
+              .buddyName.elipsis{"data-filter-text" => buddy["name"].downcase}
+                =buddy["name"]
+              .buddyStatusMessage.elipsis 
+                =buddy["nickname"]
+              .buddyListItemArrow
+    
